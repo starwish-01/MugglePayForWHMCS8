@@ -1,0 +1,31 @@
+{
+    "schema": "1.0",
+    "type": "mugglepay-gateways",
+    "name": "mugglepay",
+    "license": "proprietary",
+    "category": "payments",
+    "description": {
+      "name": "MugglePay For WHMCS",
+      "tagline": "MugglePay For Merchants To Accept Crypto",
+      "long": "MugglePay is a one-stop payment solution for merchants with an online payment need.",
+      "features": [
+        "Accept Global Payments in Day One",
+        "Low Cost",
+        "Decentralized"
+      ]
+    },
+    "logo": {
+      "filename": "logo.png"
+    },
+    "support": {
+      "homepage": "https:\/\/merchants.mugglepay.com\/user\/register?ref=MP9237F1193789",
+      "docs_url": "https:\/\/github.com\/hoythan\/MugglePayForWHMCS8"
+    },
+    "authors": [
+      {
+        "name": "hoythan",
+        "homepage": "https:\/\/github.com\/hoythan"
+      }
+    ]
+  }
+  
