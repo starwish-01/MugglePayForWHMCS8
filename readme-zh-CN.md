@@ -10,7 +10,7 @@
 * WHMCS v8.2.0 (8.2.0-release.1) or above
 
 ## 安装方式
-1. 在这里下载最新版本
+1. 在这里下载(最新版本)[https://github.com/hoythan/MugglePayForWHMCS8/releases/]
 1. 将 modules 文件夹复制到 <whmcs_dir>
 1. 打开WHMCS管理区
 1. 导航到设置 -> 付款 -> 付款网关
