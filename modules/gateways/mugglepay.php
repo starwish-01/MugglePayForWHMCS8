@@ -1,5 +1,4 @@
 <?php
-ini_set("display_errors", 1);
 # Main in Payment Gateway Module
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
