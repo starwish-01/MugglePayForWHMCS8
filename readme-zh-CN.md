@@ -25,5 +25,6 @@
 # Changelog
 ## 1.0.1 ##
 1. 允许自定义多个支付网关
+2. 添加 JS URLSearchParams 垫片
 ## 1.0.0 ##
 1. 首个版本

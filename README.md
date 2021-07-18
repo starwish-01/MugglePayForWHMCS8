@@ -24,5 +24,6 @@ English | [简体中文](./readme-zh-CN.md)
 # Changelog
 ## 1.0.1 ##
 1. Allow custom payment methods
+2. Add JS URLSearchParams polyfill
 ## 1.0.0 ##
 1. First Version

@@ -42,6 +42,8 @@ add_hook('ClientAreaPageCart', 1, function ($vars) {
 
 add_hook('ShoppingCartCheckoutOutput', 1, function ($vars) {
     return <<<HTML
+    <!-- URLSearchParams Polyfill -->
+    <script src="modules/gateways/mugglepay/js/url-search-params-polyfill-8.1.0.js"></script>
     <script>
         var $ = jQuery;
         $(document).ready(function() {
