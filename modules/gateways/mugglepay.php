@@ -1,4 +1,6 @@
 <?php
+
+ini_set('display_errors', 1);
 # Main in Payment Gateway Module
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
@@ -14,6 +16,7 @@ function mugglepay_MetaData()
 
 function mugglepay_config()
 {
+    $mugglepay = new WHMCS\Module\Gateway\MugglePay\MugglePay();
     $config = array(
         'FriendlyName' => array(
             'Type' => 'System',
@@ -38,41 +41,46 @@ function mugglepay_config()
         ),
         'mp_pay_currency' => array(
             'FriendlyName' => 'Pay Currency',
-            'Type' => 'dropdown',
-            'Options' => array(
-                ''          => 'Default',
-                'ALIPAY'    => 'Alipay',
-                'ALIGLOBAL' => 'Alipay Global',
-                'WECHAT'    => 'Wechat',
-                'BTC'       => 'BTC',
-                'LTC'       => 'LTC',
-                'ETH'       => 'ETH',
-                'EOS'       => 'EOS',
-                'BCH'       => 'BCH',
-                'LBTC'      => 'LBTC (for Lightening BTC)',
-                'CUSD'      => 'CUSD (for Celo Dollars)'
-            ),
-            'Description' => '<br>Set the MugglePay default payment gateway',
+            'Description' => 'Set the MugglePay default payment gateway',
         )
     );
+
+    $methods = $mugglepay->get_methods();
+    foreach ($methods as $sysname => $gateway) {
+        $config['mp_pay_currency_' . $sysname] = array(
+            'FriendlyName' => '',
+            'Type'  => 'yesno',
+            'Description'   => $gateway['title']
+        );
+    }
 
     return $config;
 }
 
 function mugglepay_link($params)
 {
+    array(parse_str(html_entity_decode($_SERVER["QUERY_STRING"]), $query));
+
     $mugglepay = new WHMCS\Module\Gateway\MugglePay\MugglePay($params['mp_token']);
+
+    $pay_currency = '';
+    if (isset($query['mpayment'])) {
+        $method = $mugglepay->get_methods($query['mpayment']);
+        if ($method) {
+            $pay_currency = $method['currency'];
+        }
+    }
 
     $merchant_order_id = $mugglepay->convert_order_id($params["invoiceid"]);
     $token = $mugglepay->sign($mugglepay->prepareSignId($merchant_order_id));
 
     // Only Use USD\CNY is allowed for settlement
-    $currency = $params["currency"];
+    $price_currency = $params["currency"];
     if (!empty($params["mp_currency"])) {
-        $currency = $params["mp_currency"];
+        $price_currency = $params["mp_currency"];
     }
-    if ($currency !== "CNY" && $currency !== "USD") {
-        $currency = "USD";
+    if ($price_currency !== "CNY" && $price_currency !== "USD") {
+        $price_currency = "USD";
     }
 
     // Fixed a 301 jump that could cause unreachable
@@ -94,8 +102,8 @@ function mugglepay_link($params)
         array(
             "merchant_order_id"	=> $merchant_order_id,
             "price_amount"		=> (float) $params["amount"],
-            "price_currency"	=> $currency,
-            "pay_currency"		=> $params["mp_pay_currency"],
+            "price_currency"	=> $price_currency,
+            "pay_currency"		=> $pay_currency,
             "title"				=> sprintf("Payment order #%s", $params["invoiceid"]),
             "description"		=> $description,
             "callback_url"		=> $params["systemurl"] . "modules/gateways/callback/mugglepay.php",
@@ -153,12 +161,8 @@ function mugglepay_link($params)
                 break;
             }
         } else {
-            // echo '<pre>';
-            // echo json_encode($raw_response);
-            // echo '</pre>';
-            // exit;
             logTransaction("mugglepay", $raw_response, "Request Error");
-            throw new Error($mugglepay->get_error_str($raw_response->error_code));
+            throw new Exception($mugglepay->get_error_str($raw_response->error_code, $pay_currency));
         }
     } catch (Exception $e) {
         return "<div class=\"alert alert alert-danger\">" . $e->getMessage() . "</div>";

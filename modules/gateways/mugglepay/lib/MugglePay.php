@@ -1,8 +1,7 @@
 <?php
-// require_once MUGGLEPAY_BASEDIR.  'sdk' . DIRECTORY_SEPARATOR . 'Core.php';
-
 namespace WHMCS\Module\Gateway\MugglePay;
 
+include(dirname(__FILE__) . '/../vendor/autoload.php');
 include(dirname(__FILE__) . '/../mugglepay-php-sdk-main/Core.php');
 
 class MugglePay extends \Mugglepay
@@ -78,11 +77,11 @@ class MugglePay extends \Mugglepay
         511 => 'Network Authentication Required',
     );
 
-    public function __construct($api_key)
+    public function __construct($api_key = '')
     {
         parent::__construct($api_key, self::$API_URL);
     }
-
+    
     /**
      * Convert Invoice ID To Mugglepay Order ID
      * @param { Number } $invoices - Invoice ID Number
@@ -113,6 +112,15 @@ class MugglePay extends \Mugglepay
     }
 
     /**
+     * Inserts a new object anywhere in the object
+     */
+    public function array_insert(&$array, $position, $insert_array)
+    {
+        $first_array = array_splice($array, 0, $position);
+        $array = array_merge($first_array, $insert_array, $array);
+    }
+
+    /**
      * Check that HTTPS is currently available
      */
     public function is_https()
@@ -125,6 +133,78 @@ class MugglePay extends \Mugglepay
             return true;
         }
         return false;
+    }
+
+    /**
+     * Get all payment gateways
+     * @return Returns the specified gateway configuration, default returns all
+     */
+    public function get_methods($sysname = '')
+    {
+        $methods = array(
+            'card' => array(
+                'title' => 'MugglePay Card',
+                'currency'   => 'CARD'
+            ),
+            'alipay' => array(
+                'title' => 'MugglePay Alipay',
+                'currency'   => 'ALIPAY'
+            ),
+            'alipay_global' => array(
+                'title' => 'MugglePay Alipay Global',
+                'currency'   => 'ALIGLOBAL'
+            ),
+            'wechat' => array(
+                'title' => 'MugglePay Wechat',
+                'currency'   => 'WECHAT'
+            ),
+            'btc' => array(
+                'title' => 'MugglePay BTC',
+                'currency'   => 'BTC'
+            ),
+            'ltc' => array(
+                'title' => 'MugglePay LTC',
+                'currency'   => 'LTC'
+            ),
+            'eth' => array(
+                'title' => 'MugglePay ETH',
+                'currency'   => 'ETH'
+            ),
+            'eos' => array(
+                'title' => 'MugglePay EOS',
+                'currency'   => 'EOS'
+            ),
+            'bch' => array(
+                'title' => 'MugglePay BCH',
+                'currency'   => 'BCH'
+            ),
+            'lbtc' => array(
+                'title' => 'MugglePay LBTC (for Lightening BTC)',
+                'currency'   => 'LBTC'
+            ),
+            'cusd' => array(
+                'title' => 'MugglePay CUSD (for Celo Dollars)',
+                'currency'   => 'CUSD'
+            )
+        );
+
+        if ($sysname) {
+            if (is_array($sysname)) {
+                $ret = array();
+                foreach ($sysname as $name) {
+                    $ret[] = $methods[$name];
+                }
+                return $ret;
+            } else {
+                if (!isset($methods[$sysname])) {
+                    return false;
+                }
+    
+                return $methods[$sysname];
+            }
+        }
+
+        return $methods;
     }
 
     /**

@@ -20,8 +20,10 @@
 
 
 ![image.png](https://i.loli.net/2021/07/11/J5Z6RXQCib3qSnm.png)
-![image.png](https://i.loli.net/2021/07/11/o5E9sTA3pqYVJBM.png)
+![image.png](https://i.loli.net/2021/07/19/RAE4xvd9m8lP6wa.png)
 
 # Changelog
+## 1.0.1 ##
+1. 允许自定义多个支付网关
 ## 1.0.0 ##
 1. 首个版本

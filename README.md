@@ -19,8 +19,10 @@ English | [简体中文](./readme-zh-CN.md)
 1. Set you API key in Manage Existing Gateways
 
 ![image.png](https://i.loli.net/2021/07/11/J5Z6RXQCib3qSnm.png)
-![image.png](https://i.loli.net/2021/07/11/o5E9sTA3pqYVJBM.png)
+![image.png](https://i.loli.net/2021/07/19/RAE4xvd9m8lP6wa.png)
 
 # Changelog
+## 1.0.1 ##
+1. Allow custom payment methods
 ## 1.0.0 ##
 1. First Version
