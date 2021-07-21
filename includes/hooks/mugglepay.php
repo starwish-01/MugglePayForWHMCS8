@@ -39,34 +39,3 @@ add_hook('ClientAreaPageCart', 1, function ($vars) {
 
     return $vars;
 });
-
-add_hook('ShoppingCartCheckoutOutput', 1, function ($vars) {
-    return <<<HTML
-    <!-- URLSearchParams Polyfill -->
-    <script src="modules/gateways/mugglepay/js/url-search-params-polyfill-8.1.0.js"></script>
-    <script>
-        var $ = jQuery;
-        $(document).ready(function() {
-            $('input[name="paymentmethod"]').on('ifChecked change', function(){
-                var checkeMethod = $('input[name="paymentmethod"]:checked').val()
-
-                if (checkeMethod.indexOf('mugglepay')) {
-                    $('input[name="paymentmethod"]:checked').val('mugglepay')
-                }
-
-                var form = $('form[name="orderfrm"]');
-                var formActionPrePath = $(form).attr('action').split('?')[0];
-                var formActionUrl = $(form).attr('action').split('?')[1];
-                var searchParams = new URLSearchParams(formActionUrl);
-
-                if (searchParams.has('mpayment')) {
-                    searchParams.delete('mpayment')
-                }
-                searchParams.append('mpayment', checkeMethod)
-
-                $(form).attr('action', formActionPrePath + '?' + searchParams.toString())
-            })
-        })
-    </script>
-    HTML;
-});

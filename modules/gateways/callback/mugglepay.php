@@ -5,7 +5,7 @@ App::load_function("gateway");
 App::load_function("invoice");
 
 if (!class_exists('MugglePay')) {
-    include("../muglepay/lib/MugglePay.php");
+    include("../mugglepay/lib/MugglePay.php");
 }
 
 $GATEWAY = getGatewayVariables('mugglepay');

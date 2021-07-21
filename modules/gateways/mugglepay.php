@@ -143,13 +143,6 @@ function mugglepay_link($params)
                     $lang = $params["clientdetails"]["language"] === 'chinese' ? 'zh' : 'en';
                     $raw_response->payment_url .= '&lang=' . $lang;
                     return <<<EOT
-                        <script>
-                            $(document).ready(function() {
-                                setTimeout(function() {
-                                    window.location = "{$raw_response->payment_url}";
-                                }, 1000)
-                            })
-                        </script>
                         <form action="viewinvoice.php?id={$params["invoiceid"]}" method="POST" enctype="text/plain">
                             <a href="{$raw_response->payment_url}" class="btn btn-primary btn-sm btn-block spinner-on-click">
                                 {$params["langpaynow"]}
